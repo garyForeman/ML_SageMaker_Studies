@@ -140,7 +140,12 @@ if __name__ == '__main__':
   
     ## TODO: Add args for the three model parameters: input_dim, hidden_dim, output_dim
     # Model parameters
-
+    parser.add_argument('--input_dim', type=int, default=2, metavar='N',
+                        help='number of features in training examples')
+    parser.add_argument('--hidden_dim', type=int, default=512, metavar='N',
+                        help='number of nodes to use in two hidden layers')
+    parser.add_argument('--output_dim', type=int, default=1, metavar='N',
+                        help='number of output labels')
     
     args = parser.parse_args()
 
@@ -158,15 +163,14 @@ if __name__ == '__main__':
     ## TODO:  Build the model by passing in the input params
     # To get params from the parser, call args.argument_name, ex. args.epochs or ards.hidden_dim
     # Don't forget to move your model .to(device) to move to GPU , if appropriate
-    model = None
+    model = SimpleNet(args.input_dim, args.hidden_dim, args.output_dim).to(device)
     
     # Given: save the parameters used to construct the model
     save_model_params(model, args.model_dir)
 
     ## TODO: Define an optimizer and loss function for training
-    optimizer = None
-    criterion = None
-
+    optimizer = torch.optim.SGD(model.parameters(), lr=args.lr)
+    criterion = nn.BCELoss()
     
     # Trains the model (given line of code, which calls the above training function)
     # This function *also* saves the model state dictionary
